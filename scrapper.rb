@@ -1,36 +1,71 @@
 # scrapper.rb
 require 'nokogiri'
 require 'open-uri'
+require 'awesome_print'
 
 
+REGEX = "/Dog|dog|Puppies|puppies|puppy|Puppy|pup|Pup/"
 
+# add pics to get_todays_rows
 def filter_links(rows, regex)
-  # takes in rows and returns uses
-  # regex to only return links 
-  # that have "pup", "puppy", or "dog"
-  # keywords
+  pupRows = rows.select do |row|
+    row.css(".hdrlnk").text.downcase.match(regex)
+  end
 end
 
 def get_todays_rows(doc, date_str)
-  #  1.) open chrome console to look in inside p.row to see
-  #  if there is some internal date related content
-
-  #  2.) figure out the class that you'll need to select the
-  #   date from a row
-
+  rows = doc.css('.row')
+  todayRows = rows.select do |row|
+    row.css("span.date").text == date_str
+  end
+  filter_links(todayRows, REGEX)
 end
 
-def get_page_results
-  url = "http://sfbay.craigslist.org/sfc/pet/"
-  Nokogiri::HTML(open(url))
+def get_page_results(date_str)
+  url = "today.html"
+  doc = Nokogiri::HTML(open(url))
+  get_todays_rows(doc, date_str)
 end
 
 def search(date_str)
-  get_page_results
+  results = get_page_results(date_str)
+    rows = results.map do |result|
+
+    {
+      title: result.css(".hdrlnk").text,
+      date: result.css(".date").text,
+      link: result.css(".pl a").first["href"]
+    }
+  end
+  ap rows
 end
 
-# want to learn more about 
+# want to learn more about
 # Time in ruby??
 #   http://www.ruby-doc.org/stdlib-1.9.3/libdoc/date/rdoc/Date.html#strftime-method
 today = Time.now.strftime("%b %d")
-search(today)
+
+results = search(today)
+# ap results
+
+# data = results.css(".hdrlnk").each do |link|
+#   data.push({
+#       title: link.text,
+#       url: link["href"]
+#     })
+# end
+
+# rows = results.map do |result|
+
+#   {
+#     title: result.css(".hdrlnk").text,
+#     date: result.css(".date").text,
+#     link: result.css(".hdrlnk"),
+#   }
+# end
+# ap rows
+
+
+
+
+
