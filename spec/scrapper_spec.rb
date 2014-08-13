@@ -38,11 +38,14 @@ describe "scrapper" do
     it "takes a date string and returns an array" do
       expect(get_page_results(@today)).to be_a(Array)
     end
+    it "should contain an title with text" do
+      expect(get_page_results(@today).first.css(".hdrlnk").text).to be_a(String)
+    end
   end
 
   describe "search" do
     it "takes a date string and returns a hash" do
-      expect(search(@today)).to be_a(Array)
+      expect(search(@today).first).to be_a(Hash)
     end
     it "should return an array of length 33" do
       expect(search(@today).length).to eql(33)
