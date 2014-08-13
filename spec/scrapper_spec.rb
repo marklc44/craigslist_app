@@ -21,7 +21,7 @@ describe "scrapper" do
     end
 
     it "you can also use a string" do
-      # rowsString is contains one valid row
+      # rowsString contains one valid row
       rowsString =  '<p class="row" data-pid="4581207234"> <a href="/sfc/pet/4581207234.html" class="i" data-id="0:00F0F_kUje2CUzekG"></a> <span class="txt"> <span class="star"></span> <span class="pl"> <span class="date">Aug 12</span>  <a href="/sfc/pet/4581207234.html" data-id="4581207234" class="hdrlnk">$25/night In Home Dog Sitter! Small Dog Retreat &#9829;</a> </span> <span class="l2">   <span class="pnr"> <small> (Bay Area)</small> <span class="px"> <span class="p"> pic&nbsp;<span class="maptag" data-pid="4581207234">map</span></span></span> </span>  </span> </span> </p>'
       rows = Nokogiri::HTML(rowsString)
       expect(filter_links(rows, @today).length).to eql(1)
