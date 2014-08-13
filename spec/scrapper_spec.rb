@@ -1,10 +1,10 @@
 require "./scrapper"
 
-describe "scrapper" do 
+describe "scrapper" do
 
   before(:each) do
     # use @doc in your tests to avoid hitting the
-    #   craigslist url, which would be slow and 
+    #   craigslist url, which would be slow and
     #   problematic if you were blocked
     @doc = Nokogiri::HTML(open("today.html"))
     @today = "Aug 12"
@@ -16,7 +16,8 @@ describe "scrapper" do
       rows.each do |row|
         puts row.content
       end
-      expect("your attention").to eql("this test to be erased or edited")
+      results = filter_links(rows, REGEX)
+      expect(results).to be_a(Array)
     end
 
     it "you can also use a string" do
@@ -28,5 +29,23 @@ describe "scrapper" do
   end
 
   describe "get_todays_rows" do
+    it "can take Nokogiri object and date string and return an array" do
+      expect(get_todays_rows(@doc, @today)).to be_a(Array)
+    end
+  end
+
+  describe "get_page_results" do
+    it "takes a date string and returns an array" do
+      expect(get_page_results(@today)).to be_a(Array)
+    end
+  end
+
+  describe "search" do
+    it "takes a date string and returns a hash" do
+      expect(search(@today)).to be_a(Array)
+    end
+    it "should return an array of length 33" do
+      expect(search(@today).length).to eql(33)
+    end
   end
 end

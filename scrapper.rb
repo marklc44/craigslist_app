@@ -29,7 +29,7 @@ end
 
 def search(date_str)
   results = get_page_results(date_str)
-    rows = results.map do |result|
+  rows = results.map do |result|
 
     {
       title: result.css(".hdrlnk").text,
@@ -37,7 +37,7 @@ def search(date_str)
       link: result.css(".pl a").first["href"]
     }
   end
-  ap rows
+  rows
 end
 
 # want to learn more about
@@ -46,24 +46,8 @@ end
 today = Time.now.strftime("%b %d")
 
 results = search(today)
-# ap results
-
-# data = results.css(".hdrlnk").each do |link|
-#   data.push({
-#       title: link.text,
-#       url: link["href"]
-#     })
-# end
-
-# rows = results.map do |result|
-
-#   {
-#     title: result.css(".hdrlnk").text,
-#     date: result.css(".date").text,
-#     link: result.css(".hdrlnk"),
-#   }
-# end
-# ap rows
+ap results
+puts results.length
 
 
 
